@@ -30,3 +30,35 @@ const emails = [
 ];
 
 // Требуется создать Vue приложение
+
+import {createApp,defineComponent} from "./vendor/vue.esm-browser";
+const App = defineComponent({
+  name:'App',
+  data() {
+    return {
+      filter: '',
+      Emails: emails
+    };
+  },
+  computed : {
+    filtredEmails() {
+      return Array.from(this.Emails, (v) => {
+          return {'email': v, 'filtered': this.filter !== "" && v.includes(this.filter)}
+        }
+      )
+    }
+  },
+  template: `
+    <div class="container">
+    <div class="form-group">
+      <input type="search" v-model="filter"/>
+    </div>
+    <ul>
+      <li v-for="value in filtredEmails" :class="{'marked':value.filtered}"> {{ value.email }}</li>
+    </ul>
+    </div>`
+});
+
+const app = createApp(App);
+const vm = app.mount('#app');
+window.vm = vm;
