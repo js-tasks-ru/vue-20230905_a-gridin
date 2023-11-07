@@ -1,17 +1,17 @@
 // import { createApp } from './vendor/vue.esm-browser.js';
 
 // Создайте Vue приложение
-import {createApp,defineComponent} from "./vendor/vue.esm-browser";
+import { createApp, defineComponent } from './vendor/vue.esm-browser';
 const App = defineComponent({
-  name:'App',
+  name: 'App',
   data() {
     return {
-      num1:0,
-      num2:0,
-      operator: 'sum'
+      num1: 0,
+      num2: 0,
+      operator: 'sum',
     };
   },
-  computed : {
+  computed: {
     calc() {
       switch (this.operator) {
         case 'sum':
@@ -25,11 +25,10 @@ const App = defineComponent({
         default:
           return 0;
       }
-    }
+    },
   },
 
-  template:
-    `<div class="row">
+  template: `<div class="row">
     <div class="col">
       <input type="number" v-model="num1"/>
     </div>
@@ -48,7 +47,7 @@ const App = defineComponent({
     <div class="col">=</div>
 
     <output class="col">{{ calc }}</output>
-    </div>`
+    </div>`,
 });
 
 const app = createApp(App);

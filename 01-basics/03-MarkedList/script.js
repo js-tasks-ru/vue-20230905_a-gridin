@@ -31,22 +31,21 @@ const emails = [
 
 // Требуется создать Vue приложение
 
-import {createApp,defineComponent} from "./vendor/vue.esm-browser";
+import { createApp, defineComponent } from './vendor/vue.esm-browser';
 const App = defineComponent({
-  name:'App',
+  name: 'App',
   data() {
     return {
       filter: '',
-      Emails: emails
+      Emails: emails,
     };
   },
-  computed : {
+  computed: {
     filtredEmails() {
       return Array.from(this.Emails, (v) => {
-          return {'email': v, 'filtered': this.filter !== "" && v.includes(this.filter)}
-        }
-      )
-    }
+        return { email: v, filtered: this.filter !== '' && v.includes(this.filter) };
+      });
+    },
   },
   template: `
     <div class="container">
@@ -56,7 +55,7 @@ const App = defineComponent({
     <ul>
       <li v-for="value in filtredEmails" :class="{'marked':value.filtered}"> {{ value.email }}</li>
     </ul>
-    </div>`
+    </div>`,
 });
 
 const app = createApp(App);

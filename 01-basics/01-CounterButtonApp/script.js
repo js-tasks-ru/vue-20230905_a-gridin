@@ -1,13 +1,13 @@
 // Создайте Vue приложение
-import {createApp,defineComponent} from "./vendor/vue.esm-browser";
+import { createApp, defineComponent } from './vendor/vue.esm-browser';
 const App = defineComponent({
-  name:'App',
+  name: 'App',
   data() {
     return {
-      counter: 0
+      counter: 0,
     };
   },
-  template: '<button type="button" @click="counter++">{{ counter }}</button>'
+  template: '<button type="button" @click="counter++">{{ counter }}</button>',
 });
 
 const app = createApp(App);

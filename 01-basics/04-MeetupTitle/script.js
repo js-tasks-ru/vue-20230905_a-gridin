@@ -1,4 +1,4 @@
-import {createApp,defineComponent} from "./vendor/vue.esm-browser";
+import { createApp, defineComponent } from './vendor/vue.esm-browser';
 
 const API_URL = 'https://course-vue.javascript.ru/api';
 
@@ -16,15 +16,14 @@ function fetchMeetupById(meetupId) {
 
 // Требуется создать Vue приложение
 const App = defineComponent({
-  name:'App',
+  name: 'App',
   data() {
     return {
       selectedMeetup: null,
       meetup: null,
     };
   },
-  computed : {
-  },
+  computed: {},
   methods: {
     async loadSelectedMeetup(meetupId) {
       this.meetup = await fetchMeetupById(meetupId);
@@ -41,7 +40,7 @@ const App = defineComponent({
     <hr />
 
     <h3 v-if="meetup">{{ meetup.title }}</h3>
-    </div>`
+    </div>`,
 });
 
 const app = createApp(App);
