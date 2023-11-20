@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
-const PageIndex = () => import('../views/PageIndex.vue')
-const PageLogin = () => import('../views/PageLogin.vue')
-const PageRegister = () => import('../views/PageRegister.vue')
+const PageIndex = () => import('../views/PageIndex.vue');
+const PageLogin = () => import('../views/PageLogin.vue');
+const PageRegister = () => import('../views/PageRegister.vue');
 
 export const router = createRouter({
   history: createWebHistory('/05-vue-router/01-AuthPages'),
