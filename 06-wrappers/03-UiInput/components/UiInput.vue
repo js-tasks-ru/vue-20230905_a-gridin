@@ -16,11 +16,11 @@
       :value="modelValue"
       @[eventName]="$emit('update:modelValue', $event.target.value)"
       :class="[
-      {
-        'form-control_rounded': rounded,
-        'form-control_sm': small,
-      },
-    ]"
+        {
+          'form-control_rounded': rounded,
+          'form-control_sm': small,
+        },
+      ]"
       class="form-control"
       :type="type"
     />
@@ -34,14 +34,14 @@
 export default {
   name: 'UiInput',
   props: {
-    small: { type: Boolean},
-    rounded: {type: Boolean},
-    multiline : {type: Boolean},
+    small: { type: Boolean },
+    rounded: { type: Boolean },
+    multiline: { type: Boolean },
     modelValue: String,
     type: String,
     modelModifiers: {
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   inheritAttrs: false,
   emits: ['update:modelValue'],

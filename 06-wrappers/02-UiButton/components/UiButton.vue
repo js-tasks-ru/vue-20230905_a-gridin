@@ -1,11 +1,11 @@
 <template>
   <component
-    :is='tag'
+    :is="tag"
     class="button"
     :type="tag === 'button' ? 'button' : null"
     :class="{ button_block: block, [`button_${variant}`]: true }"
   >
-    <slot/>
+    <slot />
   </component>
 </template>
 
@@ -15,16 +15,16 @@ export default {
   props: {
     tag: {
       type: [String, Object, Function],
-      default: 'button'
+      default: 'button',
     },
-    variant:{
+    variant: {
       type: String,
       default: 'secondary',
     },
-    block:{
+    block: {
       type: Boolean,
     },
-  }
+  },
 };
 </script>
 
