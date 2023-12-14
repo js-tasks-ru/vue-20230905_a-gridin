@@ -5,12 +5,15 @@ const router = createRouter({
   history: createWebHistory('/05-vue-router/05-AuthGuard'),
   routes: [
     {
+      //all
       path: '/',
+      name: 'index',
       alias: '/meetups',
       component: () => import('../views/PageMeetups.vue'),
     },
     {
       path: '/login',
+      name: 'login',
       meta: {
         requireGuest: true,
       },
@@ -38,6 +41,14 @@ const router = createRouter({
       component: () => import('../views/PageEditMeetup.vue'),
     },
   ],
+});
+router.beforeEach((to) => {
+  if (to.meta.requireAuth && !isAuthenticated()) {
+    return { name: 'login', query: { from: to.path } };
+  }
+  if (to.meta.requireGuest && isAuthenticated()) {
+    return { name: 'index' };
+  }
 });
 
 export { router };
