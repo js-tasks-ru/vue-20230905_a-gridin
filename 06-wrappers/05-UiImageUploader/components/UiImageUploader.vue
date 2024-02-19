@@ -1,8 +1,16 @@
 <template>
   <div class="image-uploader">
-    <label class="image-uploader__preview image-uploader__preview-loading" style="--bg-url: url('/link.jpeg')">
-      <span class="image-uploader__text">Загрузить изображение</span>
-      <input type="file" accept="image/*" class="image-uploader__input" />
+    <label class="image-uploader__preview" :class="{ 'image-uploader__preview-loading': hasUpload }" :style="styleUrl">
+      <span class="image-uploader__text">{{ text }}</span>
+      <input
+        ref="inputFile"
+        v-bind="$attrs"
+        type="file"
+        accept="image/*"
+        class="image-uploader__input"
+        @change="onChange"
+        @click="onClick"
+      />
     </label>
   </div>
 </template>
@@ -10,6 +18,57 @@
 <script>
 export default {
   name: 'UiImageUploader',
+  props: {
+    preview: String,
+    uploader: Function,
+  },
+  data() {
+    return {
+      hasUpload: null,
+      hasImage: this.preview,
+    };
+  },
+  inheritAttrs: false,
+  computed: {
+    text() {
+      if (this.hasUpload) return 'Загрузка...';
+      if (this.hasImage) return 'Удалить изображение';
+      else return 'Загрузить изображение';
+    },
+    styleUrl() {
+      return this.hasImage ? { '--bg-url': `url(${this.hasImage}` } : {};
+    },
+  },
+  methods: {
+    onClick(event) {
+      if (this.hasUpload || this.hasImage) event.preventDefault();
+      if (!this.hasUpload && this.hasImage) this.removeImage();
+    },
+    removeImage() {
+      this.hasImage = null;
+      this.$refs.inputFile.value = null;
+      this.$emit('remove');
+    },
+    onChange(event) {
+      const file = event.target.files[0];
+      this.hasImage = URL.createObjectURL(file);
+      this.$emit('select', file);
+      if (this.uploader) this.onUploadImage(file);
+    },
+    async onUploadImage(file) {
+      try {
+        this.hasUpload = true;
+        const result = await this.uploader(file);
+        this.$emit('upload', result);
+      } catch (error) {
+        this.removeImage();
+        this.$emit('error', error);
+      } finally {
+        this.hasUpload = false;
+      }
+    },
+  },
+  emits: ['remove', 'upload', 'select', 'error'],
 };
 </script>
 

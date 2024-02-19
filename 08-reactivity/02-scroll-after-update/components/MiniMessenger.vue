@@ -1,9 +1,10 @@
 <template>
   <main class="mini-messenger">
     <ul class="messages">
-      <li v-for="message in messages" :key="message.id" class="message">
+      <li v-for="message in messages" :key="message.id" class="message"  >
         {{ message.text }}
       </li>
+      <li ref="messageList"/>
     </ul>
     <form @submit.prevent="handleSendSubmit">
       <div class="input-group">
@@ -42,6 +43,7 @@ export default {
         text: this.newMessage,
       });
       this.newMessage = '';
+      this.$refs.messageList.scrollIntoView();
     },
   },
 };

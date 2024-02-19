@@ -1,32 +1,31 @@
 <template>
   <fieldset class="agenda-item-form">
-    <button type="button" class="agenda-item-form__remove-button">
+    <button @click="$emit('remove')" type="button" class="agenda-item-form__remove-button">
       <UiIcon icon="trash" />
     </button>
 
     <UiFormGroup>
-      <UiDropdown title="Тип" :options="$options.agendaItemTypeOptions" name="type" />
+      <UiDropdown v-model="localAgendaItem.type" title="Тип" :options="$options.agendaItemTypeOptions" name="type" />
     </UiFormGroup>
 
     <div class="agenda-item-form__row">
       <div class="agenda-item-form__col">
         <UiFormGroup label="Начало">
-          <UiInput type="time" placeholder="00:00" name="startsAt" />
+          <UiInput v-model="localAgendaItem.startsAt" type="time" placeholder="00:00" name="startsAt" />
         </UiFormGroup>
       </div>
       <div class="agenda-item-form__col">
         <UiFormGroup label="Окончание">
-          <UiInput type="time" placeholder="00:00" name="endsAt" />
+          <UiInput v-model="localAgendaItem.endsAt" type="time" placeholder="00:00" name="endsAt" />
         </UiFormGroup>
       </div>
     </div>
 
-    <UiFormGroup label="Заголовок">
-      <UiInput name="title" />
-    </UiFormGroup>
-    <UiFormGroup label="Описание">
-      <UiInput multiline name="description" />
-    </UiFormGroup>
+    <template v-for="formGroup in formGroups" :key="formGroup.label">
+      <UiFormGroup :label="formGroup.label">
+        <component :is="formGroup.component" v-bind="formGroup.props" v-model="localAgendaItem[formGroup.props.name]" />
+      </UiFormGroup>
+    </template>
   </fieldset>
 </template>
 
@@ -163,6 +162,62 @@ export default {
     agendaItem: {
       type: Object,
       required: true,
+    },
+  },
+
+  emits: ['update:agendaItem', 'remove'],
+
+  data() {
+    return {
+      localAgendaItem: { ...this.agendaItem },
+      formGroups: null,
+    };
+  },
+
+  methods: {
+    calculateNewEndsAt(newValue, oldValue) {
+      const [newHours, newMinutes] = newValue.split(':');
+      const [oldHours, oldMinutes] = oldValue.split(':');
+      const [endsAtHours, endsAtMinutes] = this.localAgendaItem.endsAt.split(':');
+
+      const startsAtDate = new Date();
+      startsAtDate.setHours(oldHours, oldMinutes);
+
+      const endsAtDate = new Date();
+      endsAtDate.setHours(endsAtHours, endsAtMinutes);
+
+      const timeDifference = endsAtDate - startsAtDate;
+
+      startsAtDate.setHours(newHours, newMinutes);
+      endsAtDate.setTime(startsAtDate.getTime() + timeDifference);
+
+      this.localAgendaItem.endsAt = endsAtDate.toTimeString().slice(0, 5);
+    },
+
+    getFormGroups() {
+      const currentTypeFormGroups = agendaItemFormSchemas[this.localAgendaItem.type];
+
+      return Object.keys(currentTypeFormGroups).map((formGroupKey) => currentTypeFormGroups[formGroupKey]);
+    },
+  },
+
+  watch: {
+    localAgendaItem: {
+      deep: true,
+      handler() {
+        this.$emit('update:agendaItem', { ...this.localAgendaItem });
+      },
+    },
+
+    'localAgendaItem.startsAt'(newValue, oldValue) {
+      this.calculateNewEndsAt(newValue, oldValue);
+    },
+
+    'localAgendaItem.type': {
+      immediate: true,
+      handler() {
+        this.formGroups = this.getFormGroups();
+      },
     },
   },
 };
