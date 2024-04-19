@@ -23,7 +23,6 @@
       :value="modelValue"
       @[updateEvent]="$emit('update:modelValue', $event.target.value)"
     />
-
     <div v-if="$slots['right-icon']" class="input-group__icon">
       <slot name="right-icon" />
     </div>

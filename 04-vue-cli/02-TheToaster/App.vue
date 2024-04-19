@@ -20,7 +20,7 @@ export default {
     },
 
     handleErrorClick() {
-      this.$refs.toaster.error('Error ' + new Date().toLocaleTimeString());
+      this.$refs.toaster.error('Error ' + new Date().toLocaleTimeString(), 500);
     },
   },
 };
